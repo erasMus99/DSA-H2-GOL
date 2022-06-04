@@ -20,4 +20,4 @@ First we do ```g++ Source.cpp Cell.cpp -w -lSDL2 -g -o gol```
 Then ```./gol```
 And TADA !
 
-![](Images/execution.gif)
+![](./Images/execution.gif)
