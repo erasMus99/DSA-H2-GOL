@@ -9,6 +9,7 @@
 */
 
 #define CELL_SIZE 30                                        // Used for the rendering
+#include <SLD.h>
 
 class Cell
 {
@@ -18,9 +19,9 @@ public:
 	void SettingCell(unsigned int x, unsigned int y);		// As it said here we sett the cells
 	void ClearingCell(unsigned int x, unsigned int y);		// And here we Clear them
 	int CellState(int x, int y);							// With this we can go and fetch the state of a Cell
-	void MoveToNextGen();					// Allow the Game to move to it's new generation, while checking and putting in place all the correct rules
+	void MoveToNextGen(SDL_Surface* surface);				// Allow the Game to move to it's new generation, while checking and putting in place all the correct rules
 	void InitTheGame();					                    // Used to Init the Game based on a predifine pattern
-    void DrawCell(unsigned int x, unsigned int y, unsigned int color);     // Added here but used in the cpp. Just in case it's needed
+    void DrawCell(SDL_Surface* surface, unsigned int x, unsigned int y, unsigned int color);     // Added here but used in the cpp. Just in case it's needed
 private:
 	unsigned char* cells;									// As said, we use a unsigned char to store our cells
 	unsigned char* temp_cells;
