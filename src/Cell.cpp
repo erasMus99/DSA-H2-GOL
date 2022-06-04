@@ -21,12 +21,6 @@ Cell::Cell(unsigned int w, unsigned int h)
 	len = w * h;
 
     // Setting the global values
-    map_width = 500;                                 // This will be used for the cell map size
-    map_height = 500;
-    cell_size = 1;                                                                           
-    surface_width = map_width * cell_size;           // And here even if it doesn't change anything yet 
-    surface_height = map_height * cell_size;
-
 
 	cells = new unsigned char[len];			// Creating the cells 'array', that's why we needed len
 	temp_cells = new unsigned char[len];	// Same for the temporary cells
@@ -43,8 +37,8 @@ Cell::~Cell()
 
 void Cell::SettingCell(unsigned int x, unsigned int y)
 {
-	int w = width;
-	int h = height;
+	unsigned int w = width;
+	unsigned int h = height;
 
 	int xLeft, xRight, yAbove, yBelow;							// Let's create our variables needed to move around and calculate offset
 	unsigned char* pointer_for_cell = cells + (y * w) + x;		// And our pointer
@@ -52,7 +46,7 @@ void Cell::SettingCell(unsigned int x, unsigned int y)
 	xLeft = (x == 0) ? w - 1 : -1;								// Using ternary operators to check the conditions. The borders of the map is also taken into account
 	xRight = (x == (w - 1)) ? -(w - 1) : 1;
 	yAbove = (y == 0) ? len - w : -w;
-	yBelow = (y == (h - 1)) ? -(int)(len - w) : w;
+	yBelow = (y == (h - 1)) ? -(len - w) : w;
 
 	*(pointer_for_cell) |= 0x01;								// Set the first bit to 1, using XOR in case there is already a value at the memory emplacement
 
@@ -69,8 +63,8 @@ void Cell::SettingCell(unsigned int x, unsigned int y)
 
 void Cell::ClearingCell(unsigned int x, unsigned int y)
 {
-	int w = width;
-	int h = height;
+	unsigned int w = width;
+	unsigned int h = height;
 
 	int xLeft, xRight, yAbove, yBelow;							// Let's create our variables needed to move around and calculate offset
 	unsigned char* pointer_for_cell = cells + (y * w) + x;		// And our pointer
@@ -78,7 +72,7 @@ void Cell::ClearingCell(unsigned int x, unsigned int y)
 	xLeft = (x == 0) ? w - 1 : -1;								// Using ternary operators to check the conditions. The borders of the map is also taken into account
 	xRight = (x == (w - 1)) ? -(w - 1) : 1;
 	yAbove = (y == 0) ? len - w : -w;
-	yBelow = (y == (h - 1)) ? -(int)(len - w) : w;
+	yBelow = (y == (h - 1)) ? (len - w) : w;
 
 	*(pointer_for_cell) &= ~0x01;								// Set the first bit to 0, using bitwise and operation
 
@@ -98,14 +92,14 @@ int Cell::CellState(int x, int y)
 	return *pointer_for_cell & 0x01;							// Return the first bit, the least significant one, where the state is stored
 }
 
-void Cell::DrawCell(SDL_Surface* surface, unsigned int x, unsigned int y, unsigned int color)
+void DrawCell(SDL_Surface* surface, unsigned int x, unsigned int y, unsigned int color, unsigned int cell_size, unsigned int surface_width)
 {
     // Setting up the pixels to use
     Uint8* pixel_ptr = (Uint8*)surface->pixels + (y * cell_size * surface_width + x * cell_size) * 4;
     
     for (unsigned int i = 0; i < cell_size; i++)
     {
-        for (unsigned int j = 0; i < cell_size; j++)
+        for (unsigned int j = 0; j < cell_size; j++)
         {
             *(pixel_ptr + j * 4) = color;
             *(pixel_ptr + j * 4 + 1) = color;
@@ -115,7 +109,7 @@ void Cell::DrawCell(SDL_Surface* surface, unsigned int x, unsigned int y, unsign
     }
 }
 
-void Cell::MoveToNextGen(SDL_Surface* surface)
+void Cell::MoveToNextGen(SDL_Surface* surface, unsigned int cell_size, unsigned int surface_width)
 {
 	unsigned int x;												// Declaring the necessary variables
 	unsigned int y;
@@ -145,7 +139,7 @@ void Cell::MoveToNextGen(SDL_Surface* surface)
 				if ((count != 2) && (count != 3))				// If the cell is alive but don't have the necessary neighbours we need to clear it
 				{
 					ClearingCell(x, y);
-                    DrawCell(surface, x, y, ON_COLOR);                   // Drawing the cell on the SDL surface
+                    DrawCell(surface, x, y, ON_COLOR, cell_size, surface_width);                   // Drawing the cell on the SDL surface
 				}
 			}
 			else
@@ -153,7 +147,7 @@ void Cell::MoveToNextGen(SDL_Surface* surface)
 				if (count == 3)									// If the cell is dead but have three neighbours we need to Set it alive
 				{
 					SettingCell(x, y);
-                    DrawCell(surface, x, y, OFF_COLOR);                  //  Erasing the dead cell
+                    DrawCell(surface, x, y, OFF_COLOR, cell_size, surface_width);                  //  Erasing the dead cell
 
 				}
 			}

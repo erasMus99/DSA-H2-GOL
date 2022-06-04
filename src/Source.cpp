@@ -2,7 +2,7 @@
 #include <iostream>
 
 // Define the time stop here for the display
-#define RATE 1
+#define RATE 0
 
 // (If RATE == 1) then sleep for 2 seconds
 #define SLEEP 2000
@@ -19,7 +19,7 @@ int main()
     SDL_Surface *surface = NULL;
     unsigned int map_width = 500;                                 // This will be used for the cell map size
     unsigned int map_height = 500;
-    unsigned int cell_size = 1;
+    unsigned int cell_size = 2;
     unsigned int surface_width = map_width * cell_size;           // And here even if it doesn't change anything yet 
     unsigned int surface_height = map_height * cell_size;
 
@@ -46,7 +46,7 @@ int main()
 
         gen++;                                          // Update the generation to count them
 
-        current_map.MoveToNextGen(surface);             // Calculate the next generation and update buffer
+        current_map.MoveToNextGen(surface, cell_size, surface_width);             // Calculate the next generation and update buffer
 
         SDL_UpdateWindowSurface(window);                // Update the window buffer with the new cells
 #if RATE
