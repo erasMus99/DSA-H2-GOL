@@ -123,7 +123,6 @@ void Cell::MoveToNextGen(SDL_Surface* surface)
 	unsigned int h = height;
 	unsigned int w = width;
 	unsigned char* pointer_for_cell;
-    const sf::Vector2f CELL_VECTOR(CELL_SIZE, CELL_SIZE);       // Added to fix the errors of rendering
 
 	memcpy(temp_cells, cells, len);								// Copying to the temp cell to keep an unaltered version in case we need to rollback to it
 
@@ -146,7 +145,7 @@ void Cell::MoveToNextGen(SDL_Surface* surface)
 				if ((count != 2) && (count != 3))				// If the cell is alive but don't have the necessary neighbours we need to clear it
 				{
 					ClearingCell(x, y);
-                    DrawCell(x, y, ON_COLOR);                   // Drawing the cell on the SDL surface
+                    DrawCell(surface, x, y, ON_COLOR);                   // Drawing the cell on the SDL surface
 				}
 			}
 			else
@@ -154,7 +153,7 @@ void Cell::MoveToNextGen(SDL_Surface* surface)
 				if (count == 3)									// If the cell is dead but have three neighbours we need to Set it alive
 				{
 					SettingCell(x, y);
-                    DrawCell(x, y, OFF_COLOR);                  //  Erasing the dead cell
+                    DrawCell(surface, x, y, OFF_COLOR);                  //  Erasing the dead cell
 
 				}
 			}
