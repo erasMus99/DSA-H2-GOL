@@ -3,7 +3,7 @@
 #include <ctime>
 #include <stdlib.h>
 #include <iostream>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #define OFF_COLOR 0x00
 #define ON_COLOR 0xFF
@@ -115,7 +115,7 @@ void Cell::DrawCell(SDL_Surface* surface, unsigned int x, unsigned int y, unsign
     }
 }
 
-void Cell::MoveToNextGen()
+void Cell::MoveToNextGen(SDL_Surface* surface)
 {
 	unsigned int x;												// Declaring the necessary variables
 	unsigned int y;

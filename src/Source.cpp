@@ -1,4 +1,5 @@
 #include "Cell.h"
+#include <iostream>
 
 // Define the time stop here for the display
 #define RATE 1
@@ -6,6 +7,7 @@
 // (If RATE == 1) then sleep for 2 seconds
 #define SLEEP 2000
 
+using namespace std;
 
 int main()
 {
@@ -23,7 +25,7 @@ int main()
 
     // Create the window and SDL surface
     window = SDL_CreateWindow("Conway's Game of Life DSA H2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, surface_width, surface_height, SDL_WINDOW_SHOWN);
-    surface = SDL_GETWindowSurface(window);
+    surface = SDL_GetWindowSurface(window);
 
 
     unsigned long gen = 0;                              // This variable will be used to count the generations

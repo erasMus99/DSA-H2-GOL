@@ -9,7 +9,7 @@
 */
 
 #define CELL_SIZE 30                                        // Used for the rendering
-#include <SLD.h>
+#include <SDL2/SDL.h>
 
 class Cell
 {
