@@ -20,10 +20,16 @@ public:
 	int CellState(int x, int y);							// With this we can go and fetch the state of a Cell
 	void MoveToNextGen();					// Allow the Game to move to it's new generation, while checking and putting in place all the correct rules
 	void InitTheGame();					                    // Used to Init the Game based on a predifine pattern
+    void DrawCell(unsigned int x, unsigned int y, unsigned int color);     // Added here but used in the cpp. Just in case it's needed
 private:
 	unsigned char* cells;									// As said, we use a unsigned char to store our cells
 	unsigned char* temp_cells;
 	unsigned int width;
 	unsigned int height;
 	unsigned int len;										// We also need a len to be able to know the total len of the map
+    unsigned int map_width;                                 // This will be used for the cell map size
+    unsigned int map_height;
+    unsigned int cell_size;                                                                           
+    unsigned int surface_width;                             // And here even if it doesn't change anything yet 
+    unsigned int surface_height;
 };

@@ -3,8 +3,13 @@
 #include <ctime>
 #include <stdlib.h>
 #include <iostream>
+#include <SDL.h>
+
+#define OFF_COLOR 0x00
+#define ON_COLOR 0xFF
 
 // Let's define our cell class here
+
 
 
 using namespace std;
@@ -15,10 +20,19 @@ Cell::Cell(unsigned int w, unsigned int h)
 	height = h;
 	len = w * h;
 
+    // Setting the global values
+    map_width = 500;                                 // This will be used for the cell map size
+    map_height = 500;
+    cell_size = 1;                                                                           
+    surface_width = map_width * cell_size;           // And here even if it doesn't change anything yet 
+    surface_height = map_height * cell_size;
+
+
 	cells = new unsigned char[len];			// Creating the cells 'array', that's why we needed len
 	temp_cells = new unsigned char[len];	// Same for the temporary cells
 
 	memset(cells, 0, len);					// Making sure that the unsigned char array is really at 0. We don't really like those random memories values
+
 }
 
 Cell::~Cell()
@@ -84,6 +98,23 @@ int Cell::CellState(int x, int y)
 	return *pointer_for_cell & 0x01;							// Return the first bit, the least significant one, where the state is stored
 }
 
+void Cell::DrawCell(SDL_Surface* surface, unsigned int x, unsigned int y, unsigned int color)
+{
+    // Setting up the pixels to use
+    Uint8* pixel_ptr = (Uint8*)surface->pixels + (y * cell_size * surface_width + x * cell_size) * 4;
+    
+    for (unsigned int i = 0; i < cell_size; i++)
+    {
+        for (unsigned int j = 0; i < cell_size; j++)
+        {
+            *(pixel_ptr + j * 4) = color;
+            *(pixel_ptr + j * 4 + 1) = color;
+            *(pixel_ptr + j * 4 + 2) = color;
+        }
+        pixel_ptr += surface_width * 4;
+    }
+}
+
 void Cell::MoveToNextGen()
 {
 	unsigned int x;												// Declaring the necessary variables
@@ -115,6 +146,7 @@ void Cell::MoveToNextGen()
 				if ((count != 2) && (count != 3))				// If the cell is alive but don't have the necessary neighbours we need to clear it
 				{
 					ClearingCell(x, y);
+                    DrawCell(x, y, ON_COLOR);                   // Drawing the cell on the SDL surface
 				}
 			}
 			else
@@ -122,6 +154,7 @@ void Cell::MoveToNextGen()
 				if (count == 3)									// If the cell is dead but have three neighbours we need to Set it alive
 				{
 					SettingCell(x, y);
+                    DrawCell(x, y, OFF_COLOR);                  //  Erasing the dead cell
 
 				}
 			}
